@@ -1,6 +1,6 @@
 from datetime import datetime
 from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python import PythonOperator
 from airflow.operators.python import get_current_context
 
 
@@ -8,26 +8,27 @@ import requests
 import json
 import pandas as pd
 import pyodbc
+API_KEY = '828d6b60fb7e5b7f396806a392ff33a5798572fbe141e767df18df05277e2415' #'4405115583184f844e23391c97c202ebe982607a0df9a400fe2fa6fedc094a43'
 
 def pull_data_from_api():
-    API_KEY = '4405115583184f844e23391c97c202ebe982607a0df9a400fe2fa6fedc094a43'
-    response_API = requests.get(f'https://apiv3.apifootball.com/?action=get_countries&APIkey={API_KEY}')
-    data = response_API.text
-    parse_json = json.loads(data)
-    return parse_json
+    response_API = requests.get(f'https://apiv3.apifootball.com/?action=get_leagues&APIkey={API_KEY}')
+    data = response_API.json()
+    print(data)
+    return data
 
 
 def insert_data_to_sql():
     server = 'LAPTOP-L24U747I\SQLEXPRESS'
-    database = 'Better_DB'
+    database = 'Better_DB_v2'
     cnxn = pyodbc.connect('DRIVER={SQL Server};SERVER=' + server + ';DATABASE=' + database + ';Trusted_Connection=yes;')
     cursor = cnxn.cursor()
     context = get_current_context()
-    parse_json = context['ti'].xcom_pull(task_ids='pull_data_from_api', key='return_value')
-    data_df = pd.json_normalize(parse_json)
-    for index, row in data_df.iterrows():
-        cursor.execute("INSERT INTO API_TEST (country_id,country_name,country_logo) values(?,?,?)", row.country_id,
-                       row.country_name, row.country_logo)
+    data = context['ti'].xcom_pull(task_ids='pull_data_from_api', key='return_value')
+    parse_json=json.dumps(data)
+
+    #data_df = pd.json_normalize(parse_json)
+    #for index, row in data_df.iterrows():
+    cursor.execute("INSERT INTO dim_Competitions values(?)", (parse_json,))
     cnxn.commit()
     cursor.close()
     return 'Done'
