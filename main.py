@@ -5,9 +5,9 @@ import requests
 API_KEY = '828d6b60fb7e5b7f396806a392ff33a5798572fbe141e767df18df05277e2415'
 
 
-def get_data_from_api(action_name, additional_headers=''):
+def get_data_from_api(action_name, additional_params=''):
     response_api = requests.get(
-        f'https://apiv3.apifootball.com/?action={action_name}&APIkey={API_KEY}{additional_headers}')
+        f'https://apiv3.apifootball.com/?action={action_name}&APIkey={API_KEY}{additional_params}')
     print(response_api.json())
     return response_api.json()
 
