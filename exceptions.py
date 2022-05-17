@@ -12,3 +12,7 @@ class HTTPNotFound(Exception):
 
 class APIForbiddenOrNotFound(Exception):
     pass
+
+
+class APIMandatoryParameters(Exception):
+    pass
