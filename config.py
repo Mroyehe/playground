@@ -1,0 +1,4 @@
+API_KEY = "828d6b60fb7e5b7f396806a392ff33a5798572fbe141e767df18df05277e2415"
+API_FOOTBALL_URL = "http://apiv3.apifootball.com/"
+API_ERROR = "error"
+HTTP_OK = 200
