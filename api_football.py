@@ -1,6 +1,8 @@
 import requests
 import os
 
+import pandas as pd
+
 import config
 
 from exceptions import APIKeyNotFound, ActionIsNone, HTTPNotFound, APIForbiddenOrNotFound, APIMandatoryParameters
@@ -190,10 +192,3 @@ class TopScorers(APIFootball):
     def __init__(self, **kwargs):
         super().__init__(self.ACTION)
         self.set_params(**kwargs)
-
-
-if __name__ == '__main__':
-    a = LiveOddsComments()
-    # r = a.get()
-    # print(r)
-
