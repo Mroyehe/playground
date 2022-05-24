@@ -13,13 +13,17 @@ def insert_json_to_sql(conn, json_data, table_name):
         cursor = conn.cursor()
         # call sql server procedure with one parameter
         # cursor.execute('EXEC prcInsertEmployees')
+        with open(f'sql_procedures/insert_into_{table_name.lower()}.sql', 'r') as fd:
+            proc_script = fd.read()
+        cursor.execute(proc_script)
+
         cursor.execute(f'EXEC INSERT_INTO_{table_name} @json = ?', json_string)
         print('inserted data')
 
     except pyodbc.Error as err:
         print('Error !!!!! %s' % err)
-    except Exception:
-        print('something else failed miserably')
+    except Exception as e:
+        print(f'something else failed miserably: {e}')
 
     conn.close()
     print('closed db connection')

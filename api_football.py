@@ -1,8 +1,6 @@
 import requests
 import os
 
-import pandas as pd
-
 import config
 
 from exceptions import APIKeyNotFound, ActionIsNone, HTTPNotFound, APIForbiddenOrNotFound, APIMandatoryParameters
