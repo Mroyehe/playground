@@ -16,7 +16,6 @@ def insert_json_to_sql(conn, json_data, table_name):
         with open(f'sql_procedures/insert_into_{table_name.lower()}.sql', 'r') as fd:
             proc_script = fd.read()
         cursor.execute(proc_script)
-
         cursor.execute(f'EXEC INSERT_INTO_{table_name} @json = ?', json_string)
         print('inserted data')
 
